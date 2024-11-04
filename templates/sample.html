@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Audio File</title>
+</head>
+<body>
+    <h1>Upload Audio File</h1>
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".mp3, .wav">
+        <button type="submit">Predict Genre</button>
+    </form>
+    <h1>Predicted Genre: {{ genre }}</h1>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Prediction</title>
+</head>
+<body>
+    <h1>Audio Genre Prediction</h1>
+    <input type="file" id="audioFileInput" accept="audio/*">
+    <button onclick="predict()">Predict</button>
+    <div id="prediction"></div>
+
+    <script>
+        function predict() {
+            var audioFile = document.getElementById('audioFileInput').files[0];
+            var formData = new FormData();
+            formData.append('audio', audioFile);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction').innerText = 'Predicted genre: ' + data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html> -->

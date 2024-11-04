@@ -1,0 +1,193 @@
+<!-- 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Genre Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
+            background-image: url('img.jpg'); 
+            background-size: cover;
+            background-position: center;
+            height: 100vh; 
+            display:flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-top: -65px;
+        }
+        .container {
+            background-color: rgba(223, 225, 233, 0.274); /* Add a semi-transparent white background to the content */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px; 
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Audio Genre Prediction</h1>
+    <div class="container">
+        <form id="audioForm">
+            <input type="file" id="audioFile" accept="audio/*">
+            <button type="button" onclick="predict()">Predict Genre</button>
+        </form>
+
+        <div id="predictionResult"></div>
+    </div>
+    <script>
+        function predict() {
+            var audioFile = document.getElementById('audioFile').files[0];
+            var formData = new FormData();
+            formData.append('audio', audioFile);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('predictionResult').innerText = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('predictionResult').innerText = 'Predicted Genre: ' + data.prediction_text;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
+ -->
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
+            background-image: url('img.jpg'); 
+            background-size: cover;
+            background-position: center;
+            height: 100vh; 
+            display:flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-top: -65px;
+        }
+        .container {
+            background-color: rgba(223, 225, 233, 0.274); /* Add a semi-transparent white background to the content */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px; 
+        }
+        h1 {
+            background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent black background to the h1 element */
+            color: antiquewhite;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        button {
+            background-color: #4CAF50; /* Green background */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        input[type=file] {
+            background-color: #f44336; /* Red background */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Play the Audio & Predict the Genre....</h1>
+    <div class="container">
+        <input type="file" id="audioFileInput" accept="audio/*"><br><br>
+        <button onclick="playAudio()">Play</button>
+        <button onclick="pauseAudio()">Pause</button>
+        <button onclick="resumeAudio()">Resume</button><br><br>
+        <button onclick="predict()">Predict</button>
+        <div id="prediction"></div>
+        <br><br>
+    </div>
+    <script>
+        var audio = null;
+
+        function playAudio() {
+            var audioFileInput = document.getElementById('audioFileInput');
+            if (audioFileInput.files.length > 0) {
+                var audioURL = URL.createObjectURL(audioFileInput.files[0]);
+                audio = new Audio(audioURL);
+                audio.play();
+            } else {
+                alert("Please select an audio file.");
+            }
+        }
+
+        function pauseAudio() {
+            if (audio) {
+                audio.pause();
+            }
+        }
+
+        function resumeAudio() {
+            if (audio) {
+                audio.play();
+            }
+        }
+
+        function predict() {
+            var audioFile = document.getElementById('audioFileInput').files[0];
+            if (!audioFile) {
+                alert("Please select an audio file.");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('audio', audioFile);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    console.error('Server error:', data.error);
+                } else {
+                    document.getElementById('prediction').innerText = 'Predicted genre: ' + data.prediction_text;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
+
